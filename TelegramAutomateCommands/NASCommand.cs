@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -63,12 +64,41 @@ namespace TelegramAutomate.Commands
 
         private string ListDirectory(string path)
         {
+            var results = new StringBuilder();
             var allFiles = Directory.GetFileSystemEntries(path);
             if (allFiles is null || allFiles.Length == 0)
             {
                 return "Empty directory";
             }
-            return string.Join("\n", allFiles);
+            foreach (var file in allFiles)
+            {
+                var strSize = "B";
+                try
+                {
+                    var size = new FileInfo(file).Length;
+                    if (size > 1024)
+                    {
+                        size /= 1024;
+                        strSize = "KB";
+                    }
+                    if (size > 1024)
+                    {
+                        size /= 1024;
+                        strSize = "MB";
+                    }
+                    if (size > 1024)
+                    {
+                        size /= 1024;
+                        strSize = "GB";
+                    }
+                    results.Append($"{file}\t{size}{strSize}\n");
+                }
+                catch (FileNotFoundException e)
+                {
+                    results.Append($"{file}\td\n");
+                }
+            }
+            return results.ToString();
         }
 
         private async Task<Message> ListDirectory(Message msg)
