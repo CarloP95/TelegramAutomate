@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32505.426
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramAutomate", "TelegramAutomate\TelegramAutomate.csproj", "{466C6837-A5DA-41F4-8E13-60544FB2E33E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{238B3EAC-B14B-45E3-BE21-F5003FD29B8C} = {238B3EAC-B14B-45E3-BE21-F5003FD29B8C}
+		{A10355C4-2479-4836-BA8D-40F4CC181454} = {A10355C4-2479-4836-BA8D-40F4CC181454}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramAutomate.Commands", "TelegramAutomateCommands\TelegramAutomate.Commands.csproj", "{238B3EAC-B14B-45E3-BE21-F5003FD29B8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramAutomate.Abstract", "TelegramAutomate.Abstract\TelegramAutomate.Abstract.csproj", "{A10355C4-2479-4836-BA8D-40F4CC181454}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{466C6837-A5DA-41F4-8E13-60544FB2E33E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{466C6837-A5DA-41F4-8E13-60544FB2E33E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{466C6837-A5DA-41F4-8E13-60544FB2E33E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{466C6837-A5DA-41F4-8E13-60544FB2E33E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{238B3EAC-B14B-45E3-BE21-F5003FD29B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{238B3EAC-B14B-45E3-BE21-F5003FD29B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{238B3EAC-B14B-45E3-BE21-F5003FD29B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{238B3EAC-B14B-45E3-BE21-F5003FD29B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A10355C4-2479-4836-BA8D-40F4CC181454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A10355C4-2479-4836-BA8D-40F4CC181454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A10355C4-2479-4836-BA8D-40F4CC181454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A10355C4-2479-4836-BA8D-40F4CC181454}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14F5F4C9-A6ED-45C1-8B70-64DA4FFD68BB}
+	EndGlobalSection
+EndGlobal

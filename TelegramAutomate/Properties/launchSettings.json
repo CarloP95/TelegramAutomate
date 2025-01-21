@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TelegramAutomate": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
