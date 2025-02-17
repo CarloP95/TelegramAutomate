@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3627" />
     <PackageReference Include="MonoTorrent" Version="3.0.2" />
   </ItemGroup>
 
