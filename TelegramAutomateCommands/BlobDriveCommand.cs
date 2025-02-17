@@ -4,6 +4,7 @@ using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -38,10 +39,15 @@ namespace TelegramAutomate.Commands
         public Task<string> ExecuteCommandAsync(FileInfo fileInfo)
         {
             string folderId = EnsureFolder();
-            string fileId = UploadFile(fileInfo.FullName);
-
             string fileIdFound = SearchFileInFolder(folderId, fileInfo.Name);
-            if (string.IsNullOrEmpty(fileIdFound) || string.Compare(fileIdFound, fileId, true) != 0)
+            if (!string.IsNullOrEmpty(fileIdFound))
+            {
+                string urlFound = SetFilePublic(fileIdFound);
+                return Task.FromResult(urlFound);
+            }
+
+            string fileId = UploadFile(fileInfo.FullName, folderId);
+            if (string.IsNullOrEmpty(fileId))
             {
                 return Task.FromResult(string.Empty);
             }
@@ -156,11 +162,12 @@ namespace TelegramAutomate.Commands
             return fileId;
         }
 
-        private string UploadFile(string filePath)
+        private string UploadFile(string filePath, string folderId)
         {
             var fileMetadata = new Google.Apis.Drive.v3.Data.File()
             {
-                Name = Path.GetFileName(filePath)
+                Name = Path.GetFileName(filePath),
+                Parents = new List<string> { folderId }
             };
 
             using (var stream = new FileStream(filePath, FileMode.Open))

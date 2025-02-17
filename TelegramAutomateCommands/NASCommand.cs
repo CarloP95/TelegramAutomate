@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -17,11 +19,14 @@ namespace TelegramAutomate.Commands
 
         private string _nasPath { get; set; }
 
-        public NASCommand(ITelegramBotClient bot, IAuthenticationService auth, string nasPath)
+        private IEnumerable<IBlobUploadService> _uploadServices { get; set; }
+
+        public NASCommand(ITelegramBotClient bot, IAuthenticationService auth, string nasPath, IEnumerable<IBlobUploadService> uploadServices)
         {
             _bot = bot;
             _auth = auth;
             _nasPath = nasPath;
+            _uploadServices = uploadServices;
         }
 
         public string CommandDescription()
@@ -148,6 +153,24 @@ namespace TelegramAutomate.Commands
             if (!System.IO.File.Exists(file))
             {
                 return await _bot.SendMessage(msg.Chat, "Don't know what to get. File does not exists");
+            }
+
+            var fi = new FileInfo(file);
+            if (fi.Length > 50 * 1024 * 1024) //File bigger than 50MB
+            {
+                var selectedUS = _uploadServices.First(us => us.CanHandle(fi).Result);
+                if (selectedUS == null)
+                {
+                    return await _bot.SendMessage(msg.Chat, "Sorry i can't send you the file because it's too big and no configured services is able to handle it. Bye");
+                }
+
+                var url = await selectedUS.ExecuteCommandAsync(fi);
+                if (string.IsNullOrEmpty(url))
+                {
+                    return await _bot.SendMessage(msg.Chat, "Sorry the admin of this bot is a dumbass and it's trusting a loose guy in Catania. It seems that some problems happened in loading the file in the BlobUploadService. Bye");
+                }
+
+                return await _bot.SendMessage(msg.Chat, $"The url to download the file is {url}");
             }
 
             await using var stream = System.IO.File.OpenRead(file);

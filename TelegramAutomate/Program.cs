@@ -35,6 +35,13 @@ IHost host = Host.CreateDefaultBuilder(args)
 
 
     #region commands
+
+    services.AddSingleton<IBlobUploadService>(sp =>
+    {
+        var botConf = sp.GetService<IOptions<BotConfiguration>>()?.Value;
+        return new BlobDriveCommand(true, "client_secret_apps.googleusercontent.com.json", "NAS");
+    });
+
     services.AddSingleton<IUpdateCommand<Message>>(sp =>
     {
         return new PhotoCommand(sp.GetService<ITelegramBotClient>(), true);
@@ -71,13 +78,8 @@ IHost host = Host.CreateDefaultBuilder(args)
     services.AddSingleton<IUpdateCommand<Message>>(sp =>
     {
         var botConf = sp.GetService<IOptions<BotConfiguration>>()?.Value;
-        return new NASCommand(sp.GetService<ITelegramBotClient>(), sp.GetService<AuthenticationService>(), botConf.NASPath);
-    });
-
-    services.AddSingleton<IBlobUploadService>(sp =>
-    {
-        var botConf = sp.GetService<IOptions<BotConfiguration>>()?.Value;
-        return new BlobDriveCommand(true, "client_secret-.apps.googleusercontent.com.json", "NAS");
+        var uploadServices = sp.GetServices<IBlobUploadService>();
+        return new NASCommand(sp.GetService<ITelegramBotClient>(), sp.GetService<AuthenticationService>(), botConf.NASPath, uploadServices);
     });
     #endregion commands
 })
