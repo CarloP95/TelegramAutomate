@@ -15,9 +15,10 @@ This project was simply designed to run on an old x32 Architecture to be a Home 
 - Only the Admin configured with FirstName, SecondName, ID in the appsettings file can access the functions /nas and /torrent.
 - The admin needs to authenticate itself when using /nas or /torrent function. He needs to use the password stored in the appsettings file.
 - Every hour the authentication will expire and the admin needs to restore the authentication for security reason.
+- Can send virtually unlimited size files using DriveCommand. Just need to provide a client-secret.json from your Google account and allow the usage of Drive application.
+- A cronjob will clean the "NAS" folder in GoogleDrive once a day. Default dwell time is 5 days.
 
 ### Future implementation
 
-- Bypass 50MB limit of Telegram API using Drive to temporary upload files and create a download Link available for some configured number of hours.
 - Give a temporary permit to download files to another Telegram User
 - Use a secure way to send password to the bot to avoid storing the password in the chat.
