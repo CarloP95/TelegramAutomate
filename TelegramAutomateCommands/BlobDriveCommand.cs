@@ -3,6 +3,7 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using GoogleDriveFile = Google.Apis.Drive.v3.Data.File;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -112,7 +113,7 @@ namespace TelegramAutomate.Commands
         }
 
 
-        private string EnsureFolder()
+        public string EnsureFolder()
         {
             string folderId = null;
 
@@ -147,19 +148,28 @@ namespace TelegramAutomate.Commands
 
         private string SearchFileInFolder(string folderId, string fileName)
         {
-            string fileId = null;
-
-            var request = _dS.Files.List();
-            request.Q = $"name='{fileName}' and '{folderId}' in parents and trashed=false";
-            request.Fields = "files(id, name)";
-            var result = request.Execute();
-
-            if (result.Files != null && result.Files.Count > 0)
+            var files = SearchFileInFolderQAndFields($"name='{fileName}' and '{folderId}' in parents and trashed=false", "files(id, name)");
+            if (files is null || files.Count == 0)
             {
-                fileId = result.Files.First().Id;
+                return string.Empty;
             }
 
-            return fileId;
+            return files.First().Id;
+        }
+
+        public IList<GoogleDriveFile> GetAllFilesInFolder(string folderId)
+        {
+            return SearchFileInFolderQAndFields($"'{folderId}' in parents and trashed=false", "files(id, name, createdTime)");
+        }
+
+        private IList<GoogleDriveFile> SearchFileInFolderQAndFields(string query, string fields)
+        {
+            var request = _dS.Files.List();
+            request.Q = query;
+            request.Fields = fields;
+
+            var result = request.Execute();
+            return result.Files;
         }
 
         private string UploadFile(string filePath, string folderId)
@@ -176,6 +186,24 @@ namespace TelegramAutomate.Commands
                 request.Fields = "id";
                 request.Upload();
                 return request.ResponseBody?.Id;
+            }
+        }
+
+        public async Task<bool> DeleteFile(string fileId)
+        {
+            if (string.IsNullOrEmpty(fileId))
+            {
+                return false;
+            }
+
+            try
+            {
+                await _dS.Files.Delete(fileId).ExecuteAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
             }
         }
 

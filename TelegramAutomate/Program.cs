@@ -5,7 +5,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using TelegramAutomate;
 using TelegramAutomate.Abstract;
+using TelegramAutomate.Abstract.Jobs;
 using TelegramAutomate.Commands;
+using TelegramAutomate.Jobs;
 using TelegramAutomate.Services;
 
 
@@ -82,6 +84,13 @@ IHost host = Host.CreateDefaultBuilder(args)
         return new NASCommand(sp.GetService<ITelegramBotClient>(), sp.GetService<AuthenticationService>(), botConf.NASPath, uploadServices);
     });
     #endregion commands
+    #region Jobs
+    services.AddCronJob<CleanBlobDrive>(opt =>
+    {
+        opt.CronExpression = "00 01 * * *";
+        opt.TimeZoneInfo = TimeZoneInfo.Local;
+    });
+    #endregion Jobs
 })
 .Build();
 

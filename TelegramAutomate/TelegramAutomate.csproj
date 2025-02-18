@@ -17,6 +17,7 @@
 
 
     <ItemGroup>
+        <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3627" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
         <PackageReference Include="Telegram.Bot" Version="22.1.3" />
